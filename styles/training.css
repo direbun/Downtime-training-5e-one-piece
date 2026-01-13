@@ -1,0 +1,10 @@
+.dt-training { font-size: 13px; line-height: 1.3; }
+.dt-header { display:flex; gap:8px; margin-bottom:10px; }
+.dt-btn { padding: 4px 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; }
+.dt-danger { border-color: rgba(255,80,80,0.5); }
+.dt-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+.dt-table th, .dt-table td { padding: 4px 6px; border-bottom: 1px solid rgba(255,255,255,0.08); vertical-align: top; }
+.dt-table th { text-align:left; opacity:0.85; }
+.dt-pill { display:inline-block; padding: 1px 6px; border:1px solid rgba(255,255,255,0.2); border-radius: 10px; font-size: 12px; opacity: 0.9; }
+.dt-muted { opacity: 0.8; }
+.dt-small { font-size: 12px; opacity: 0.85; }
