@@ -36,37 +36,23 @@ const ABILITY_BANDS = [
 /* -------------------------------------------- */
 
 const SETTINGS = {
-  // Optional rules
   NAT20_DOUBLE: "nat20DoubleProgress",
   NAT1_BACK: "nat1BackProgress",
-
-  // Roll style
-  ALWAYS_ADV: "alwaysAdvantage", // if enabled -> always advantage; otherwise Trainer? grants advantage
-
-  // Fail-soft DC per category
+  ALWAYS_ADV: "alwaysAdvantage",
   SOFT_ABILITY: "softDcAbility",
   SOFT_HP: "softDcHp",
   SOFT_RES_NEW: "softDcResNew",
   SOFT_RES_REFINE: "softDcResRefine",
   SOFT_HAKI: "softDcHaki",
-
-  // Base + increase per rank
   HP_BASE: "hpBaseDc",
   HP_INC: "hpDcPerRank",
-
   RESNEW_BASE: "resNewBaseDc",
   RESNEW_INC: "resNewDcPerRank",
-
   RESREF_BASE: "resRefBaseDc",
   RESREF_INC: "resRefDcPerRank",
-
   HAKI_BASE: "hakiBaseDc",
   HAKI_INC: "hakiDcPerRank",
-
-  // Restrict damage types
   RESTRICT_DMG: "restrictedDamageTypes",
-
-  // Chat cosmetics
   FANCY_CHAT: "fancyChatCards",
 };
 
@@ -76,32 +62,19 @@ Hooks.once("init", () => {
   console.log(`${MODULE_ID} | init`);
 
   const regBool = (key, name, hint, def=false) => game.settings.register(MODULE_ID, key, {
-    name, hint,
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: def
+    name, hint, scope: "world", config: true, type: Boolean, default: def
   });
 
   const regNum = (key, name, hint, def) => game.settings.register(MODULE_ID, key, {
-    name, hint,
-    scope: "world",
-    config: true,
-    type: Number,
-    default: def
+    name, hint, scope: "world", config: true, type: Number, default: def
   });
 
   const regStr = (key, name, hint, def="") => game.settings.register(MODULE_ID, key, {
-    name, hint,
-    scope: "world",
-    config: true,
-    type: String,
-    default: def
+    name, hint, scope: "world", config: true, type: String, default: def
   });
 
   regBool(SETTINGS.FANCY_CHAT, "Fancy Chat Cards", "Use animated, stylized training chat cards.", true);
 
-  // Default false so it doesn't always roll with advantage unless enabled
   regBool(
     SETTINGS.ALWAYS_ADV,
     "Training Rolls Always Advantage",
@@ -148,215 +121,57 @@ function ensureStyles() {
 
   const style = document.createElement("style");
   style.id = id;
-  style.textContent = `
-/* ===== Fancy Chat Cards ===== */
-.dt-chatcard {
-  border: 1px solid rgba(255,255,255,0.16);
-  border-radius: 16px;
-  padding: 12px 12px 10px;
-  background: linear-gradient(135deg, rgba(0,0,0,0.22), rgba(0,0,0,0.08));
-  box-shadow: 0 10px 30px rgba(0,0,0,0.28);
-  position: relative;
-  overflow: hidden;
-}
-.dt-chatcard::before{
-  content:"";
-  position:absolute;
-  inset:-60px;
-  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18), transparent 45%),
-              radial-gradient(circle at 70% 80%, rgba(255,255,255,0.10), transparent 55%);
-  opacity: 0.9;
-  pointer-events:none;
-}
-.dt-chatcard .dt-head {
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap: 10px;
-  position: relative;
-  z-index: 1;
-}
-.dt-chatcard .dt-title {
-  margin:0;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
-}
-.dt-chatcard .dt-sub {
-  margin: 2px 0 0;
-  opacity: 0.78;
-  font-size: 0.86rem;
-}
-.dt-chatcard .dt-icon {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(0,0,0,0.18);
-  margin-right: 8px;
-}
-.dt-chatcard .dt-left {
-  display:flex;
-  gap: 10px;
-  align-items:flex-start;
-}
-.dt-chatcard .dt-badge {
-  border: 1px solid rgba(255,255,255,0.22);
-  border-radius: 999px;
-  padding: 4px 9px;
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  background: rgba(0,0,0,0.18);
-}
-.dt-chatcard.dt-success .dt-badge { box-shadow: 0 0 0 2px rgba(0,255,140,0.10) inset; }
-.dt-chatcard.dt-fail .dt-badge { box-shadow: 0 0 0 2px rgba(255,70,70,0.12) inset; }
 
-.dt-chatcard .dt-body{
-  margin-top: 10px;
-  position: relative;
-  z-index: 1;
-}
-.dt-chatcard .dt-kpis{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  gap: 8px;
-}
-.dt-chatcard .dt-kpi{
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 14px;
-  padding: 8px 10px;
-  background: rgba(0,0,0,0.14);
-}
-.dt-chatcard .dt-kpi h4{
-  margin:0;
-  font-size: 0.78rem;
-  opacity: 0.78;
-}
-.dt-chatcard .dt-kpi p{
-  margin: 2px 0 0;
-  font-size: 1.05rem;
-  font-weight: 750;
-}
-.dt-chatcard .dt-note{
-  margin: 8px 0 0;
-  opacity: 0.82;
-  font-size: 0.86rem;
-}
-.dt-chatcard .dt-sep{
-  height:1px;
-  background: rgba(255,255,255,0.16);
-  margin: 10px 0;
-}
+  // Minified CSS (same rules as your original; just compact to keep the macro manageable)
+  style.textContent =
+`.dt-chatcard{border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:12px 12px 10px;background:linear-gradient(135deg,rgba(0,0,0,.22),rgba(0,0,0,.08));box-shadow:0 10px 30px rgba(0,0,0,.28);position:relative;overflow:hidden}
+.dt-chatcard:before{content:"";position:absolute;inset:-60px;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.18),transparent 45%),radial-gradient(circle at 70% 80%,rgba(255,255,255,.10),transparent 55%);opacity:.9;pointer-events:none}
+.dt-chatcard .dt-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:relative;z-index:1}
+.dt-chatcard .dt-title{margin:0;font-size:1.05rem;letter-spacing:.02em}
+.dt-chatcard .dt-sub{margin:2px 0 0;opacity:.78;font-size:.86rem}
+.dt-chatcard .dt-icon{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.18);margin-right:8px}
+.dt-chatcard .dt-left{display:flex;gap:10px;align-items:flex-start}
+.dt-chatcard .dt-badge{border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:4px 9px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;background:rgba(0,0,0,.18)}
+.dt-chatcard.dt-success .dt-badge{box-shadow:0 0 0 2px rgba(0,255,140,.10) inset}
+.dt-chatcard.dt-fail .dt-badge{box-shadow:0 0 0 2px rgba(255,70,70,.12) inset}
+.dt-chatcard .dt-body{margin-top:10px;position:relative;z-index:1}
+.dt-chatcard .dt-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.dt-chatcard .dt-kpi{border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:8px 10px;background:rgba(0,0,0,.14)}
+.dt-chatcard .dt-kpi h4{margin:0;font-size:.78rem;opacity:.78}
+.dt-chatcard .dt-kpi p{margin:2px 0 0;font-size:1.05rem;font-weight:750}
+.dt-chatcard .dt-note{margin:8px 0 0;opacity:.82;font-size:.86rem}
+.dt-chatcard .dt-sep{height:1px;background:rgba(255,255,255,.16);margin:10px 0}
+.dt-chatcard .dt-progress{margin-top:8px;border:1px solid rgba(255,255,255,.18);border-radius:999px;height:10px;background:rgba(0,0,0,.28);overflow:hidden}
+.dt-chatcard .dt-progress>span{display:block;height:100%;width:var(--dt-pct,0%);background:linear-gradient(90deg,rgba(0,255,140,.90),rgba(0,255,140,.35));box-shadow:0 0 18px rgba(0,255,140,.45);position:relative}
+.dt-chatcard .dt-progress>span:after{content:"";position:absolute;inset:0;transform:translateX(-40%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:dtShine 1.2s linear infinite;opacity:.45}
+@keyframes dtShine{to{transform:translateX(120%)}}
+.dt-chatcard.dt-success{animation:dtPop 260ms ease-out}
+.dt-chatcard.dt-fail{animation:dtShake 240ms ease-out}
+@keyframes dtPop{from{transform:translateY(6px) scale(.99);filter:brightness(.98)}to{transform:translateY(0) scale(1);filter:brightness(1)}}
+@keyframes dtShake{0%{transform:translateX(0)}25%{transform:translateX(-2px)}50%{transform:translateX(2px)}75%{transform:translateX(-2px)}100%{transform:translateX(0)}}
+.dt-chatcard.dt-crit:after{content:"";position:absolute;inset:-40px;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.40),transparent 40%),radial-gradient(circle at 80% 60%,rgba(255,255,255,.20),transparent 45%);opacity:.45;pointer-events:none;animation:dtSpark 1.6s ease-in-out infinite}
+@keyframes dtSpark{0%,100%{transform:rotate(0deg);opacity:.30}50%{transform:rotate(8deg);opacity:.55}}
+.dt-roll-details summary{cursor:pointer;opacity:.9}
+.dt-roll-details{margin-top:8px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;padding:8px 10px;background:rgba(0,0,0,.10)}
+.dt-training-wrap{padding:.95rem;gap:.95rem}
+.dt-training-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+.dt-training-title{margin:0;font-size:1.35rem;letter-spacing:.02em}
+.dt-training-sub{margin:.25rem 0 0;opacity:.75;font-size:.9rem}
+.dt-grid{display:grid;grid-template-columns:1fr;gap:.95rem}
+.dt-card{padding:.95rem;border:1px solid rgba(255,255,255,.10);border-radius:14px;background:rgba(0,0,0,.10)}
+.dt-section-title{margin:0;font-size:1.05rem;letter-spacing:.01em}
+.dt-muted{opacity:.75;margin:.25rem 0 0;font-size:.9rem}
+.dt-sep{height:1px;background:currentColor;opacity:.12;margin:.75rem 0}
+.dt-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.65rem}
+.dt-tile{padding:.7rem;border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(0,0,0,.12)}
+.dt-tile h4{margin:0;font-size:.92rem;opacity:.85;font-weight:650}
+.dt-big{margin:.2rem 0 0;font-size:1.25rem;font-weight:750;letter-spacing:.01em}
+.dt-note{margin:.25rem 0 0;font-size:.85rem;opacity:.78}
+.dt-chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.5rem}
+.dt-chip{padding:.18rem .5rem;border:1px solid rgba(255,255,255,.15);border-radius:999px;font-size:.82rem;opacity:.9;background:rgba(0,0,0,.10)}
+@media (max-width:900px){.dt-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.dt-tiles{grid-template-columns:1fr}}`;
 
-/* vivid green fill + darker track */
-.dt-chatcard .dt-progress{
-  margin-top: 8px;
-  border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 999px;
-  height: 10px;
-  background: rgba(0,0,0,0.28);
-  overflow:hidden;
-}
-.dt-chatcard .dt-progress > span{
-  display:block;
-  height:100%;
-  width: var(--dt-pct, 0%);
-  background: linear-gradient(90deg, rgba(0,255,140,0.90), rgba(0,255,140,0.35));
-  box-shadow: 0 0 18px rgba(0,255,140,0.45);
-  position: relative;
-}
-.dt-chatcard .dt-progress > span::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  transform: translateX(-40%);
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-  animation: dtShine 1.2s linear infinite;
-  opacity: 0.45;
-}
-@keyframes dtShine { to { transform: translateX(120%); } }
-
-.dt-chatcard.dt-success { animation: dtPop 260ms ease-out; }
-.dt-chatcard.dt-fail { animation: dtShake 240ms ease-out; }
-
-@keyframes dtPop {
-  from { transform: translateY(6px) scale(0.99); filter: brightness(0.98); }
-  to { transform: translateY(0) scale(1); filter: brightness(1); }
-}
-@keyframes dtShake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-2px); }
-  50% { transform: translateX(2px); }
-  75% { transform: translateX(-2px); }
-  100% { transform: translateX(0); }
-}
-
-.dt-chatcard.dt-crit::after{
-  content:"";
-  position:absolute;
-  inset:-40px;
-  background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.40), transparent 40%),
-              radial-gradient(circle at 80% 60%, rgba(255,255,255,0.20), transparent 45%);
-  opacity: 0.45;
-  pointer-events:none;
-  animation: dtSpark 1.6s ease-in-out infinite;
-}
-@keyframes dtSpark {
-  0%,100% { transform: rotate(0deg); opacity: 0.30; }
-  50% { transform: rotate(8deg); opacity: 0.55; }
-}
-
-.dt-roll-details summary{
-  cursor:pointer;
-  opacity:0.9;
-}
-.dt-roll-details{
-  margin-top: 8px;
-  border: 1px dashed rgba(255,255,255,0.18);
-  border-radius: 14px;
-  padding: 8px 10px;
-  background: rgba(0,0,0,0.10);
-}
-
-/* ===== Training Tab styling (core + Tidy tab contents) ===== */
-.dt-training-wrap { padding: 0.95rem; gap: 0.95rem; }
-.dt-training-top { display:flex; align-items:flex-start; justify-content:space-between; gap: 0.75rem; }
-.dt-training-title { margin:0; font-size: 1.35rem; letter-spacing: 0.02em; }
-.dt-training-sub { margin:0.25rem 0 0 0; opacity:0.75; font-size: 0.9rem; }
-
-.dt-grid { display:grid; grid-template-columns: 1fr; gap: 0.95rem; }
-.dt-card { padding: 0.95rem; border: 1px solid rgba(255,255,255,0.10); border-radius: 14px; background: rgba(0,0,0,0.10); }
-.dt-section-title { margin:0; font-size: 1.05rem; letter-spacing: 0.01em; }
-.dt-muted { opacity:0.75; margin: 0.25rem 0 0 0; font-size: 0.9rem; }
-.dt-sep { height: 1px; background: currentColor; opacity: 0.12; margin: 0.75rem 0; }
-
-.dt-tiles { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0.65rem; }
-.dt-tile {
-  padding: 0.7rem;
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 12px;
-  background: rgba(0,0,0,0.12);
-}
-.dt-tile h4 { margin:0; font-size: 0.92rem; opacity:0.85; font-weight: 650; }
-.dt-big { margin:0.2rem 0 0 0; font-size: 1.25rem; font-weight: 750; letter-spacing: 0.01em; }
-.dt-note { margin:0.25rem 0 0 0; font-size: 0.85rem; opacity:0.78; }
-
-.dt-chips { display:flex; flex-wrap:wrap; gap:0.35rem; margin-top: 0.5rem; }
-.dt-chip {
-  padding: 0.18rem 0.5rem;
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 999px;
-  font-size: 0.82rem;
-  opacity: 0.9;
-  background: rgba(0,0,0,0.10);
-}
-
-@media (max-width: 900px) { .dt-tiles { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-@media (max-width: 620px) { .dt-tiles { grid-template-columns: 1fr; } }
-  `;
   document.head.appendChild(style);
 }
 
@@ -410,11 +225,6 @@ function getKeptD20(roll) {
 
 /**
  * Spend a GP cost from mixed coin denominations.
- * Preference:
- *  1) If cost is whole GP and actor has enough GP => spend ONLY GP.
- *  2) Otherwise, spend GP first (including breaking 1 GP for "change" if needed),
- *     and ONLY THEN convert/break other coins if remaining cost still exists.
- *
  * Conversions (D&D 5e):
  *  1 pp = 10 gp = 1000 cp
  *  1 gp = 10 sp = 100 cp
@@ -436,10 +246,8 @@ async function spendGp(actor, gpCost) {
     return Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0;
   };
 
-  // Work in copper for accuracy (supports e.g. 12.5 gp if you ever allow it)
   const costCp = Math.round(costGp * 100);
 
-  // Read wallet
   let wallet = {
     pp: toInt(cur.pp),
     gp: toInt(cur.gp),
@@ -461,7 +269,6 @@ async function spendGp(actor, gpCost) {
     return { ok: false, spent: 0 };
   }
 
-  // CASE 1: whole-GP cost and enough GP -> spend only GP
   if (costCp % 100 === 0 && wallet.gp * 100 >= costCp) {
     const gpToSpend = costCp / 100;
     wallet.gp = Math.max(0, wallet.gp - gpToSpend);
@@ -477,21 +284,17 @@ async function spendGp(actor, gpCost) {
     return { ok: true, spent: costGp };
   }
 
-  // CASE 2: spend GP first (and break 1 GP for change if needed)
   let remainingCp = costCp;
 
-  // Spend as many whole GP as we can (100cp chunks)
   const gpSpendWhole = Math.min(wallet.gp, Math.floor(remainingCp / 100));
   wallet.gp -= gpSpendWhole;
   remainingCp -= gpSpendWhole * 100;
 
-  // If still need < 100cp and we have GP left, break 1 GP into change (ep/sp/cp)
   if (remainingCp > 0 && remainingCp < 100 && wallet.gp > 0) {
-    wallet.gp -= 1; // spend 1 additional gp (100cp)
-    const changeCp = 100 - remainingCp; // give back change
+    wallet.gp -= 1;
+    const changeCp = 100 - remainingCp;
     remainingCp = 0;
 
-    // Add change back, preferring larger small coins (ep then sp then cp)
     const addEp = Math.floor(changeCp / 50);
     const remAfterEp = changeCp - addEp * 50;
     const addSp = Math.floor(remAfterEp / 10);
@@ -502,20 +305,15 @@ async function spendGp(actor, gpCost) {
     wallet.cp += addCp;
   }
 
-  // If remainingCp still exists, we must use other coins (pp/ep/sp/cp)
   if (remainingCp > 0) {
-    // Convert other coins to cp pool
     const otherCp =
       wallet.pp * 1000 +
       wallet.ep * 50 +
       wallet.sp * 10 +
       wallet.cp;
 
-    // We already ensured totalCp >= costCp, so otherCp must cover remainingCp now
     let poolCp = otherCp - remainingCp;
 
-    // Rebuild the "other coins" pool into a tidy breakdown (pp->gp->ep->sp->cp).
-    // Note: GP here is allowed as "change" from breaking pp/ep/sp/cp, which is normal.
     const rebuilt = { pp: 0, gp: 0, ep: 0, sp: 0, cp: 0 };
 
     rebuilt.pp = Math.floor(poolCp / 1000);
@@ -532,8 +330,6 @@ async function spendGp(actor, gpCost) {
 
     rebuilt.cp = poolCp;
 
-    // Replace other coins with rebuilt, and keep the GP we already left in wallet.gp
-    // BUT: because rebuilt.gp is valid "change", we add it into wallet.gp.
     wallet.pp = rebuilt.pp;
     wallet.gp = wallet.gp + rebuilt.gp;
     wallet.ep = rebuilt.ep;
@@ -562,7 +358,7 @@ async function postTrainingCard({
   title,
   subtitle = "",
   badge = "",
-  outcome = "success", // "success" | "fail"
+  outcome = "success",
   roll,
   nat = null,
   dcBase,
@@ -571,7 +367,8 @@ async function postTrainingCard({
   progressText = "",
   progressPct = 0,
   extraHtml = "",
-  trainerSpent = 0
+  trainerSpent = 0,
+  autoPass = false
 }) {
   const speaker = ChatMessage.getSpeaker({ actor });
   const isCrit = nat === 20;
@@ -594,10 +391,15 @@ async function postTrainingCard({
                : "";
 
   const rollTotal = Number(roll?.total ?? 0);
-  const rollHtml = roll ? await roll.render() : "";
+  const rollTotalDisplay = autoPass ? "AUTO" : rollTotal;
+  const rollHtml = (roll && !autoPass) ? await roll.render() : "";
 
   const trainerLine = trainerSpent > 0
     ? `<p class="dt-note"><i class="fa-solid fa-coins"></i> Training cost paid: <b>${trainerSpent} gp</b></p>`
+    : "";
+
+  const autoLine = autoPass
+    ? `<p class="dt-note"><i class="fa-solid fa-check"></i> <b>Auto Pass</b> selected (no roll made).</p>`
     : "";
 
   const content = `
@@ -617,7 +419,7 @@ async function postTrainingCard({
     <div class="dt-kpis">
       <div class="dt-kpi">
         <h4>Roll Total</h4>
-        <p>${rollTotal}</p>
+        <p>${rollTotalDisplay}</p>
       </div>
       <div class="dt-kpi">
         <h4>Difficulty</h4>
@@ -631,6 +433,7 @@ async function postTrainingCard({
 
     <p class="dt-note">${showDcLine}</p>
     ${trainerLine}
+    ${autoLine}
 
     <div class="dt-progress"><span></span></div>
 
@@ -649,7 +452,7 @@ async function postTrainingCard({
   const msgData = {
     speaker,
     content,
-    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+    type: roll ? CONST.CHAT_MESSAGE_TYPES.ROLL : CONST.CHAT_MESSAGE_TYPES.OTHER,
     rolls: roll ? [roll] : []
   };
 
@@ -657,7 +460,7 @@ async function postTrainingCard({
 }
 
 /* -------------------------------------------- */
-/* Trainer Prompt                               */
+/* Trainer Prompt (now includes Auto Pass)      */
 /* -------------------------------------------- */
 
 async function promptTrainerCost() {
@@ -681,7 +484,16 @@ async function promptTrainerCost() {
           label: "Continue",
           callback: (html) => resolve({
             trainer: Boolean(html.find("#dt-trainer")[0]?.checked),
-            gp: Number(html.find("#dt-gp").val() || 0)
+            gp: Number(html.find("#dt-gp").val() || 0),
+            autoPass: false
+          })
+        },
+        auto: {
+          label: "Auto Pass",
+          callback: (html) => resolve({
+            trainer: Boolean(html.find("#dt-trainer")[0]?.checked),
+            gp: Number(html.find("#dt-gp").val() || 0),
+            autoPass: true
           })
         },
         cancel: { label: "Cancel", callback: () => resolve(null) }
@@ -730,8 +542,9 @@ async function runDowntimeTraining(actor) {
 
   const trainerInfo = await promptTrainerCost();
   if (!trainerInfo) return;
-  let trainerSpent = 0;
+  const autoPass = !!trainerInfo.autoPass;
 
+  let trainerSpent = 0;
   if (trainerInfo.trainer && trainerInfo.gp > 0) {
     const pay = await spendGp(actor, trainerInfo.gp);
     if (!pay.ok) return;
@@ -795,16 +608,22 @@ async function runDowntimeTraining(actor) {
       ? `2d20kh + @abilities.${ability}.mod`
       : `1d20 + @abilities.${ability}.mod`;
 
-    const roll = await new Roll(formula, actor.getRollData()).evaluate({ async: true });
-    const nat = getKeptD20(roll);
+    let roll = null;
+    let nat = null;
+    let success = true;
 
-    let success = roll.total >= dcUsed;
-    if (nat1Back && nat === 1) success = false;
+    if (!autoPass) {
+      roll = await new Roll(formula, actor.getRollData()).evaluate({ async: true });
+      nat = getKeptD20(roll);
+
+      success = roll.total >= dcUsed;
+      if (nat1Back && nat === 1) success = false;
+    }
 
     let gained = 0;
 
     if (success) {
-      gained = (nat20Double && nat === 20) ? 2 : 1;
+      gained = (!autoPass && nat20Double && nat === 20) ? 2 : 1;
       successes += gained;
       failMod = 0;
     } else {
@@ -831,7 +650,7 @@ async function runDowntimeTraining(actor) {
     const extra = leveledUp
       ? `<p class="dt-note"><b>Power Up!</b> ${ability.toUpperCase()} increases <b>${currentScore} → ${currentScore + 1}</b>.</p>`
       : (success
-        ? `<p class="dt-note"><b>Success!</b> +${gained} progress.</p>`
+        ? `<p class="dt-note"><b>${autoPass ? "Auto Pass!" : "Success!"}</b> +${gained} progress.</p>`
         : `<p class="dt-note"><b>Failure.</b> ${nat1Back && nat === 1 ? "Nat 1: -1 progress." : "No progress."}</p>`);
 
     await postTrainingCard({
@@ -839,7 +658,7 @@ async function runDowntimeTraining(actor) {
       icon: "fa-solid fa-chart-simple",
       title: `Ability Training: ${ability.toUpperCase()}`,
       subtitle: `Score ${currentScore} • Need ${needed} successes`,
-      badge: success ? "SUCCESS" : "FAILURE",
+      badge: autoPass ? "AUTO PASS" : (success ? "SUCCESS" : "FAILURE"),
       outcome: success ? "success" : "fail",
       roll,
       nat,
@@ -849,7 +668,8 @@ async function runDowntimeTraining(actor) {
       progressText: `${successes}/${needed}`,
       progressPct: pct,
       extraHtml: extra,
-      trainerSpent
+      trainerSpent,
+      autoPass
     });
 
     return;
@@ -876,16 +696,22 @@ async function runDowntimeTraining(actor) {
       ? "2d20kh + @abilities.str.mod + @abilities.dex.mod + @abilities.con.mod"
       : "1d20 + @abilities.str.mod + @abilities.dex.mod + @abilities.con.mod";
 
-    const roll = await new Roll(formula, actor.getRollData()).evaluate({ async: true });
-    const nat = getKeptD20(roll);
+    let roll = null;
+    let nat = null;
+    let success = true;
 
-    let success = roll.total >= dcUsed;
-    if (nat1Back && nat === 1) success = false;
+    if (!autoPass) {
+      roll = await new Roll(formula, actor.getRollData()).evaluate({ async: true });
+      nat = getKeptD20(roll);
+
+      success = roll.total >= dcUsed;
+      if (nat1Back && nat === 1) success = false;
+    }
 
     let gained = 0;
 
     if (success) {
-      gained = (nat20Double && nat === 20) ? 2 : 1;
+      gained = (!autoPass && nat20Double && nat === 20) ? 2 : 1;
       successes += gained;
       failMod = 0;
     } else {
@@ -910,7 +736,7 @@ async function runDowntimeTraining(actor) {
       `;
     } else {
       extra = success
-        ? `<p class="dt-note"><b>Success!</b> +${gained} progress.</p>`
+        ? `<p class="dt-note"><b>${autoPass ? "Auto Pass!" : "Success!"}</b> +${gained} progress.</p>`
         : `<p class="dt-note"><b>Failure.</b> ${nat1Back && nat === 1 ? "Nat 1: -1 progress." : "No progress."}</p>`;
     }
 
@@ -923,7 +749,7 @@ async function runDowntimeTraining(actor) {
       icon: "fa-solid fa-heart-pulse",
       title: "Endurance Training",
       subtitle: `Rank ${ranks} • Need ${needed} successes`,
-      badge: success ? "SUCCESS" : "FAILURE",
+      badge: autoPass ? "AUTO PASS" : (success ? "SUCCESS" : "FAILURE"),
       outcome: success ? "success" : "fail",
       roll,
       nat,
@@ -933,7 +759,8 @@ async function runDowntimeTraining(actor) {
       progressText: `${successes}/${needed}`,
       progressPct: pct,
       extraHtml: extra,
-      trainerSpent
+      trainerSpent,
+      autoPass
     });
 
     return;
@@ -1035,8 +862,17 @@ async function runDowntimeTraining(actor) {
       ? "2d20kh + @abilities.str.mod + @abilities.dex.mod + @abilities.con.mod + @abilities.int.mod + @abilities.wis.mod + @abilities.cha.mod"
       : "1d20 + @abilities.str.mod + @abilities.dex.mod + @abilities.con.mod + @abilities.int.mod + @abilities.wis.mod + @abilities.cha.mod";
 
-    const roll = await new Roll(formula, actor.getRollData()).evaluate({ async: true });
-    const nat = getKeptD20(roll);
+    let roll = null;
+    let nat = null;
+    let success = true;
+
+    if (!autoPass) {
+      roll = await new Roll(formula, actor.getRollData()).evaluate({ async: true });
+      nat = getKeptD20(roll);
+
+      success = roll.total >= dcUsed;
+      if (nat1Back && nat === 1) success = false;
+    }
 
     let successes = isNew
       ? Number(trainingData.new.successes ?? 0)
@@ -1044,12 +880,9 @@ async function runDowntimeTraining(actor) {
 
     let failMod = failModBefore;
 
-    let success = roll.total >= dcUsed;
-    if (nat1Back && nat === 1) success = false;
-
     let gained = 0;
     if (success) {
-      gained = (nat20Double && nat === 20) ? 2 : 1;
+      gained = (!autoPass && nat20Double && nat === 20) ? 2 : 1;
       successes += gained;
       failMod = 0;
     } else {
@@ -1090,7 +923,7 @@ async function runDowntimeTraining(actor) {
       }
     } else {
       extra = success
-        ? `<p class="dt-note"><b>Success!</b> +${gained} progress.</p>`
+        ? `<p class="dt-note"><b>${autoPass ? "Auto Pass!" : "Success!"}</b> +${gained} progress.</p>`
         : `<p class="dt-note"><b>Failure.</b> ${nat1Back && nat === 1 ? "Nat 1: -1 progress." : "No progress."}</p>`;
     }
 
@@ -1111,7 +944,7 @@ async function runDowntimeTraining(actor) {
       icon: "fa-solid fa-shield-halved",
       title: isNew ? "Resilience Training: New Resistance" : `Resilience Training: Refine ${DAMAGE_LABELS[targetDamageType] ?? targetDamageType}`,
       subtitle: `Resilience Rank ${resilienceRank} • Need ${needed} successes`,
-      badge: success ? "SUCCESS" : "FAILURE",
+      badge: autoPass ? "AUTO PASS" : (success ? "SUCCESS" : "FAILURE"),
       outcome: success ? "success" : "fail",
       roll,
       nat,
@@ -1121,7 +954,8 @@ async function runDowntimeTraining(actor) {
       progressText: `${successes}/${needed}`,
       progressPct: pct,
       extraHtml: extra,
-      trainerSpent
+      trainerSpent,
+      autoPass
     });
 
     return;
@@ -1285,16 +1119,22 @@ async function runDowntimeTraining(actor) {
     const dcUsed = adjustDc(dcBase, failModBefore, !!S(SETTINGS.SOFT_HAKI));
     const needed = 5 + rank;
 
-    const roll = await new Roll(rollFormula, actor.getRollData()).evaluate({ async: true });
-    const nat = getKeptD20(roll);
+    let roll = null;
+    let nat = null;
+    let success = true;
 
-    let success = roll.total >= dcUsed;
-    if (nat1Back && nat === 1) success = false;
+    if (!autoPass) {
+      roll = await new Roll(rollFormula, actor.getRollData()).evaluate({ async: true });
+      nat = getKeptD20(roll);
+
+      success = roll.total >= dcUsed;
+      if (nat1Back && nat === 1) success = false;
+    }
 
     let gained = 0;
 
     if (success) {
-      gained = (nat20Double && nat === 20) ? 2 : 1;
+      gained = (!autoPass && nat20Double && nat === 20) ? 2 : 1;
       successes += gained;
       failMod = 0;
     } else {
@@ -1310,7 +1150,7 @@ async function runDowntimeTraining(actor) {
       extra += `<p class="dt-note"><b>Rank Up!</b> New rank: <b>${rank + 1}</b></p>`;
     } else {
       extra += success
-        ? `<p class="dt-note"><b>Success!</b> +${gained} progress.</p>`
+        ? `<p class="dt-note"><b>${autoPass ? "Auto Pass!" : "Success!"}</b> +${gained} progress.</p>`
         : `<p class="dt-note"><b>Failure.</b> ${nat1Back && nat === 1 ? "Nat 1: -1 progress." : "No progress."}</p>`;
     }
 
@@ -1326,7 +1166,7 @@ async function runDowntimeTraining(actor) {
       icon,
       title: `Training: ${title}`,
       subtitle: `Rank ${track.rank ?? rank} • Need ${needed} successes`,
-      badge: success ? "SUCCESS" : "FAILURE",
+      badge: autoPass ? "AUTO PASS" : (success ? "SUCCESS" : "FAILURE"),
       outcome: success ? "success" : "fail",
       roll,
       nat,
@@ -1336,7 +1176,8 @@ async function runDowntimeTraining(actor) {
       progressText: `${successes}/${needed}`,
       progressPct: pct,
       extraHtml: extra,
-      trainerSpent
+      trainerSpent,
+      autoPass
     });
 
     return;
@@ -1677,4 +1518,5 @@ Hooks.once("tidy5e-sheet.ready", (api) => {
     console.warn(`${MODULE_ID} | Tidy 5e tab registration failed`, err);
   }
 });
+
 
