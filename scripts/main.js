@@ -1518,5 +1518,3 @@ Hooks.once("tidy5e-sheet.ready", (api) => {
     console.warn(`${MODULE_ID} | Tidy 5e tab registration failed`, err);
   }
 });
-
-
